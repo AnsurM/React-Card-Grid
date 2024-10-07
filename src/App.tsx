@@ -1,23 +1,27 @@
 import { useState } from "react";
-import "./App.css";
+import { Card, Grid, LoadingIndicator, Modal } from "./components";
+import { Gif } from "./types";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [gifs, setGifs] = useState<Gif[]>([]);
+  const [selectedGif, setSelectedGif] = useState<Gif | null>(null);
 
   return (
     <>
       <h1>React Card Grid Challenge</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {loading ? (
+        <LoadingIndicator />
+      ) : (
+        <Grid>
+          {gifs.map((gif) => (
+            <Card key={gif.id} gif={gif} onClick={setSelectedGif} />
+          ))}
+        </Grid>
+      )}
+      {selectedGif && (
+        <Modal gif={selectedGif} onClose={() => setSelectedGif(null)} />
+      )}
     </>
   );
 }
