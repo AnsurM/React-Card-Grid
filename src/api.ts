@@ -22,7 +22,7 @@ export const getTrendingGifs = async ({
   const response = await fetch(
     `${import.meta.env.VITE_GIPHY_API_URL}/trending?api_key=${
       import.meta.env.VITE_GIPHY_API_KEY
-    }&limit=${limit}&offset=${offset}`
+    }&limit=${limit}&offset=${offset}&rating=g`
   );
   const data = await response.json();
   return data;
@@ -42,7 +42,7 @@ export const getSearchGifs = async ({
   const response = await fetch(
     `${import.meta.env.VITE_GIPHY_API_URL}/search?api_key=${
       import.meta.env.VITE_GIPHY_API_KEY
-    }&q=${query}&limit=${limit}&offset=${offset}`
+    }&q=${query}&limit=${limit}&offset=${offset}&rating=g`
   );
   const data = await response.json();
   return data;

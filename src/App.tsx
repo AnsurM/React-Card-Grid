@@ -78,11 +78,13 @@ function App() {
           <StyledPagination>
             <Pagination
               showPrevious={gifOffset > 0}
-              showNext={true}
+              showNext={gifOffset < 486}
               onClickPrevious={() =>
                 gifOffset > 0 && setGifOffset(Math.max(0, gifOffset - LIMIT))
               }
-              onClickNext={() => setGifOffset(gifOffset + LIMIT)}
+              onClickNext={() =>
+                gifOffset < 486 && setGifOffset(gifOffset + LIMIT)
+              }
             />
           </StyledPagination>
         </>
