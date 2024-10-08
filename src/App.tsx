@@ -1,13 +1,38 @@
 import { useEffect, useState } from "react";
-import { Card, GifGrid, LoadingIndicator, Modal } from "./components";
+import { GifGrid, LoadingIndicator, Modal } from "./components";
 import { Gif } from "./types";
 import { Pagination } from "./components/Pagination";
 import { getTrendingGifs } from "./api";
 import { ErrorIndicator } from "./components/ErrorIndicator";
 
-// import styled from 'styled-components';
+import styled from "styled-components";
 
 const LIMIT = 15;
+
+const AppContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  height: 90vh;
+  padding: 2rem;
+`;
+
+const MaxHeightContainer = styled.div`
+  flex: 1 1 auto;
+`;
+
+const StyledHeading = styled.h1`
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  flex: 0 1 auto;
+`;
+
+const StyledPagination = styled.div`
+  flex: 0 1 auto;
+`;
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -35,31 +60,38 @@ function App() {
 
   return (
     <AppContainer>
-      <h1>React Card Grid Challenge</h1>
+      <StyledHeading>React Card Grid Challenge</StyledHeading>
       {loading ? (
-        <LoadingIndicator />
+        <MaxHeightContainer>
+          <LoadingIndicator />
+        </MaxHeightContainer>
       ) : error ? (
-        // if we had more time, we would have implemented an ErrorBoundary
-        <ErrorIndicator />
+        <MaxHeightContainer>
+          <ErrorIndicator />
+        </MaxHeightContainer>
       ) : gifs.length > 0 ? (
-        <div className="grid-container">
-          <GifGrid gifs={gifs} onGifClick={setSelectedGif} />
-          <Pagination
-            showPrevious={gifOffset > 0}
-            showNext={true}
-            onClickPrevious={() =>
-              gifOffset > 0 && setGifOffset(Math.max(0, gifOffset - LIMIT))
-            }
-            onClickNext={() => setGifOffset(gifOffset + LIMIT)}
-          />
-        </div>
+        <>
+          <MaxHeightContainer>
+            <GifGrid gifs={gifs} onGifClick={setSelectedGif} />
+          </MaxHeightContainer>
+          <StyledPagination>
+            <Pagination
+              showPrevious={gifOffset > 0}
+              showNext={true}
+              onClickPrevious={() =>
+                gifOffset > 0 && setGifOffset(Math.max(0, gifOffset - LIMIT))
+              }
+              onClickNext={() => setGifOffset(gifOffset + LIMIT)}
+            />
+          </StyledPagination>
+        </>
       ) : (
         <div>No gifs found</div>
       )}
       {selectedGif && (
         <Modal gif={selectedGif} onClose={() => setSelectedGif(null)} />
       )}
-    </>
+    </AppContainer>
   );
 }
 
