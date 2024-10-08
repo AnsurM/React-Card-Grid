@@ -1,24 +1,98 @@
-import { useState } from "react";
-import "./App.css";
+import { useEffect, useState } from "react";
+import { GifGrid, LoadingIndicator, Modal, Pagination } from "./components";
+import { Gif } from "./types";
+import { getTrendingGifs } from "./api";
+import { ErrorIndicator } from "./components/ErrorIndicator";
+
+import styled from "styled-components";
+
+const LIMIT = 15;
+
+const AppContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  height: 90vh;
+  padding: 2rem;
+`;
+
+const MaxHeightContainer = styled.div`
+  overflow: scroll;
+  width: 100%;
+  flex: 1 1 auto;
+`;
+
+const StyledHeading = styled.h1`
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  flex: 0 1 auto;
+`;
+
+const StyledPagination = styled.div`
+  flex: 0 1 auto;
+`;
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [gifs, setGifs] = useState<Gif[]>([]);
+  const [gifOffset, setGifOffset] = useState(0);
+  const [selectedGif, setSelectedGif] = useState<Gif | null>(null);
+
+  const fetchTrendingGifs = async (offset: number) => {
+    setLoading(true);
+    try {
+      const response = await getTrendingGifs({ offset, limit: LIMIT });
+      setGifs(response.data);
+    } catch (error) {
+      console.error("Error fetching trending gifs:", error);
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTrendingGifs(gifOffset);
+  }, [gifOffset]);
 
   return (
-    <>
-      <h1>React Card Grid Challenge</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <AppContainer>
+      <StyledHeading>React Card Grid Challenge</StyledHeading>
+      {loading ? (
+        <MaxHeightContainer>
+          <LoadingIndicator />
+        </MaxHeightContainer>
+      ) : error ? (
+        <MaxHeightContainer>
+          <ErrorIndicator />
+        </MaxHeightContainer>
+      ) : gifs.length > 0 ? (
+        <>
+          <MaxHeightContainer>
+            <GifGrid gifs={gifs} onGifClick={setSelectedGif} />
+          </MaxHeightContainer>
+          <StyledPagination>
+            <Pagination
+              showPrevious={gifOffset > 0}
+              showNext={true}
+              onClickPrevious={() =>
+                gifOffset > 0 && setGifOffset(Math.max(0, gifOffset - LIMIT))
+              }
+              onClickNext={() => setGifOffset(gifOffset + LIMIT)}
+            />
+          </StyledPagination>
+        </>
+      ) : (
+        <div>No gifs found</div>
+      )}
+      {selectedGif && (
+        <Modal gif={selectedGif} onClose={() => setSelectedGif(null)} />
+      )}
+    </AppContainer>
   );
 }
 
