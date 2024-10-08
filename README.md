@@ -12,7 +12,6 @@
 - [Deployment](#deployment)
 - [Testing](#testing)
 - [Accessibility](#accessibility)
-- [Contributing](#contributing)
 - [License](#license)
 
 ## Overview
