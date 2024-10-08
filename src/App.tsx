@@ -5,6 +5,7 @@ import { getTrendingGifs } from "./api";
 import { ErrorIndicator } from "./components/ErrorIndicator";
 
 import styled from "styled-components";
+import { NoResults } from "./components/NoResults";
 
 const LIMIT = 15;
 
@@ -32,6 +33,7 @@ const StyledHeading = styled.h1`
 `;
 
 const StyledPagination = styled.div`
+  width: 20%;
   flex: 0 1 auto;
 `;
 
@@ -71,23 +73,25 @@ function App() {
           <ErrorIndicator />
         </MaxHeightContainer>
       ) : gifs.length > 0 ? (
-        <>
-          <MaxHeightContainer>
-            <GifGrid gifs={gifs} onGifClick={setSelectedGif} />
-          </MaxHeightContainer>
-          <StyledPagination>
-            <Pagination
-              showPrevious={gifOffset > 0}
-              showNext={true}
-              onClickPrevious={() =>
-                gifOffset > 0 && setGifOffset(Math.max(0, gifOffset - LIMIT))
-              }
-              onClickNext={() => setGifOffset(gifOffset + LIMIT)}
-            />
-          </StyledPagination>
-        </>
+        <MaxHeightContainer>
+          <GifGrid gifs={gifs} onGifClick={setSelectedGif} />
+        </MaxHeightContainer>
       ) : (
-        <div>No gifs found</div>
+        <NoResults />
+      )}
+      {(loading || gifs.length > 0) && (
+        <StyledPagination>
+          <Pagination
+            showPrevious={loading || gifOffset > 0}
+            showNext={loading || gifOffset < 486}
+            onClickPrevious={() =>
+              gifOffset > 0 && setGifOffset(Math.max(0, gifOffset - LIMIT))
+            }
+            onClickNext={() =>
+              gifOffset < 486 && setGifOffset(gifOffset + LIMIT)
+            }
+          />
+        </StyledPagination>
       )}
       {selectedGif && (
         <Modal gif={selectedGif} onClose={() => setSelectedGif(null)} />

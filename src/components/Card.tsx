@@ -1,6 +1,7 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Gif } from "../types";
 import styled from "styled-components";
+import SkeletonLoader from "./SkeletonLoader";
 
 interface CardProps {
   gif: Gif;
@@ -12,8 +13,7 @@ const StyledCard = styled.div`
   flex-direction: column;
   width: 100%;
   max-width: 200px;
-  height: 0;
-  padding-bottom: 100%;
+  aspect-ratio: 1/1;
   position: relative;
   transition: transform 0.3s ease-in-out;
   cursor: pointer;
@@ -25,19 +25,25 @@ const StyledCard = styled.div`
 `;
 
 const StyledImage = styled.img`
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 60%;
   object-fit: cover;
   border-radius: 5px 5px 0 0;
 `;
 
-const StyledTitle = styled.div`
+const StyledSkeletonContainer = styled.div`
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 60%;
+  &.loaded {
+    display: none;
+  }
+`;
+
+const StyledTitle = styled.div`
   width: 100%;
   height: 40%;
   display: flex;
@@ -53,9 +59,18 @@ const StyledTitle = styled.div`
 `;
 
 export const Card: FC<CardProps> = ({ gif, onClick }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
   return (
     <StyledCard onClick={() => onClick(gif)}>
-      <StyledImage src={gif.images.original.url} alt={gif.title} />
+      <StyledSkeletonContainer className={isLoaded ? "loaded" : ""}>
+        <SkeletonLoader />
+      </StyledSkeletonContainer>
+      <StyledImage
+        src={gif.images.fixed_width.url}
+        alt={gif.title}
+        onLoad={() => setIsLoaded(true)}
+        loading="lazy"
+      />
       <StyledTitle>
         {gif.title.substring(0, 30)}
         {gif.title.length > 30 ? "..." : ""}
