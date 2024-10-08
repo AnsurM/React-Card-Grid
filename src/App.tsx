@@ -19,6 +19,7 @@ const AppContainer = styled.div`
 `;
 
 const MaxHeightContainer = styled.div`
+  width: 100%;
   flex: 1 1 auto;
 `;
 
