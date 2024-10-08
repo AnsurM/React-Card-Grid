@@ -12,8 +12,7 @@ const StyledCard = styled.div`
   flex-direction: column;
   width: 100%;
   max-width: 200px;
-  height: 0;
-  padding-bottom: 100%;
+  aspect-ratio: 1/1;
   position: relative;
   transition: transform 0.3s ease-in-out;
   cursor: pointer;
@@ -25,9 +24,6 @@ const StyledCard = styled.div`
 `;
 
 const StyledImage = styled.img`
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 60%;
   object-fit: cover;
@@ -35,9 +31,6 @@ const StyledImage = styled.img`
 `;
 
 const StyledTitle = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
   width: 100%;
   height: 40%;
   display: flex;
