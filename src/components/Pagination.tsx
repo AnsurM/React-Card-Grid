@@ -41,6 +41,10 @@ const PaginationButton = styled.button`
     outline: 2px solid #0056b3;
     outline-offset: 2px;
   }
+
+  &:first-child {
+    margin-right: 1rem;
+  }
 `;
 
 export const Pagination: FC<PaginationProps> = ({
