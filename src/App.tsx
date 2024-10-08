@@ -5,6 +5,7 @@ import { getTrendingGifs } from "./api";
 import { ErrorIndicator } from "./components/ErrorIndicator";
 
 import styled from "styled-components";
+import { NoResults } from "./components/NoResults";
 
 const LIMIT = 15;
 
@@ -89,7 +90,7 @@ function App() {
           </StyledPagination>
         </>
       ) : (
-        <div>No gifs found</div>
+        <NoResults />
       )}
       {selectedGif && (
         <Modal gif={selectedGif} onClose={() => setSelectedGif(null)} />
