@@ -33,18 +33,24 @@ const StyledTitle = styled.div`
   width: 100%;
   height: 40%;
   display: flex;
-  align-items: center;
-  justify-content: left;
-  padding: 0 8px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 8px;
   background-color: rgba(255, 255, 255, 0.8);
   box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  overflow: hidden;
 `;
 
 export const Card: FC<CardProps> = ({ gif, onClick }) => {
   return (
     <StyledCard onClick={() => onClick(gif)}>
       <StyledImage src={gif.images.original.url} alt={gif.alt_text} />
-      <StyledTitle>{gif.title}</StyledTitle>
+      <StyledTitle>
+        {gif.title.substring(0, 30)}
+        {gif.title.length > 30 ? "..." : ""}
+      </StyledTitle>
     </StyledCard>
   );
 };
