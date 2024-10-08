@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { Gif } from "../types";
 import styled from "styled-components";
 import { CloseIcon } from "../assets/icons";
@@ -79,9 +79,26 @@ const StyledGif = styled.img`
 `;
 
 export const Modal: FC<ModalProps> = ({ gif, onClose }) => {
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        event.target instanceof Element &&
+        event.target.classList.contains("modal-overlay")
+      ) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
+
   return (
-    <StyledModalContainer className="open">
-      <StyledModalContent>
+    <StyledModalContainer className="open modal-overlay">
+      <StyledModalContent className="modal-content">
         <StyledHeader>
           <StyledTitle>
             {gif.title.substring(0, 100)}
