@@ -1,6 +1,7 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Gif } from "../types";
 import styled from "styled-components";
+import SkeletonLoader from "./SkeletonLoader";
 
 interface CardProps {
   gif: Gif;
@@ -30,6 +31,18 @@ const StyledImage = styled.img`
   border-radius: 5px 5px 0 0;
 `;
 
+const StyledSkeletonContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 60%;
+  &.loaded {
+    display: none;
+  }
+`;
+
 const StyledTitle = styled.div`
   width: 100%;
   height: 40%;
@@ -46,9 +59,18 @@ const StyledTitle = styled.div`
 `;
 
 export const Card: FC<CardProps> = ({ gif, onClick }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
   return (
     <StyledCard onClick={() => onClick(gif)}>
-      <StyledImage src={gif.images.fixed_width.url} alt={gif.title} />
+      <StyledSkeletonContainer className={isLoaded ? "loaded" : ""}>
+        <SkeletonLoader />
+      </StyledSkeletonContainer>
+      <StyledImage
+        src={gif.images.fixed_width.url}
+        alt={gif.title}
+        onLoad={() => setIsLoaded(true)}
+        loading="lazy"
+      />
       <StyledTitle>
         {gif.title.substring(0, 30)}
         {gif.title.length > 30 ? "..." : ""}
