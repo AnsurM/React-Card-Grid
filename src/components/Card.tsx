@@ -15,6 +15,13 @@ const StyledCard = styled.div`
   height: 0;
   padding-bottom: 100%;
   position: relative;
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  &:hover,
+  &:focus {
+    transform: scale(1.1);
+  }
 `;
 
 const StyledImage = styled.img`
@@ -24,6 +31,7 @@ const StyledImage = styled.img`
   width: 100%;
   height: 60%;
   object-fit: cover;
+  border-radius: 5px 5px 0 0;
 `;
 
 const StyledTitle = styled.div`
@@ -41,6 +49,7 @@ const StyledTitle = styled.div`
   box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
   overflow: hidden;
+  border-radius: 0 0 5px 5px;
 `;
 
 export const Card: FC<CardProps> = ({ gif, onClick }) => {
