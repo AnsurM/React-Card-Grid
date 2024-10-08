@@ -57,6 +57,7 @@ const StyledCloseButton = styled.button`
   color: #000;
   background: none;
   border: none;
+  border-radius: 25%;
   padding: 0.25rem;
   &:hover,
   &:focus {
