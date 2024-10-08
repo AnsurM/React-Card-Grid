@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { GifGrid, LoadingIndicator, Modal } from "./components";
+import { GifGrid, LoadingIndicator, Modal, Pagination } from "./components";
 import { Gif } from "./types";
-import { Pagination } from "./components/Pagination";
 import { getTrendingGifs } from "./api";
 import { ErrorIndicator } from "./components/ErrorIndicator";
 
