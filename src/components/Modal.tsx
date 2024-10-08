@@ -1,7 +1,8 @@
-import { FC, useEffect, useRef, KeyboardEvent } from "react";
+import { FC, useEffect, useRef, KeyboardEvent, useState } from "react";
 import { Gif } from "../types";
 import styled from "styled-components";
 import { CloseIcon } from "../assets/icons";
+import SkeletonLoader from "./SkeletonLoader";
 
 interface ModalProps {
   gif: Gif;
@@ -76,13 +77,27 @@ const StyledDivider = styled.div`
 `;
 
 const StyledGif = styled.img`
-  width: 100%;
+  width: 0;
   aspect-ratio: 1/1;
-  max-width: 480px;
-  max-height: 480px;
   border-radius: 1rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   margin: 1rem 0;
+  visibility: hidden;
+  max-width: 480px;
+  &.loaded {
+    visibility: visible;
+    width: 100%;
+  }
+`;
+
+const StyledSkeletonContainer = styled.div`
+  width: 100%;
+  max-width: 480px;
+  padding: 1rem 0;
+  aspect-ratio: 1/1;
+  &.loaded {
+    display: none;
+  }
 `;
 
 const SROnly = styled.span`
@@ -100,6 +115,7 @@ const SROnly = styled.span`
 export const Modal: FC<ModalProps> = ({ gif, onClose }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -181,9 +197,15 @@ export const Modal: FC<ModalProps> = ({ gif, onClose }) => {
           </StyledCloseButton>
         </StyledHeader>
         <StyledDivider />
+        <StyledSkeletonContainer className={imageLoaded ? "loaded" : ""}>
+          <SkeletonLoader />
+        </StyledSkeletonContainer>
         <StyledGif
+          className={imageLoaded ? "loaded" : ""}
           src={gif.images.original.url}
+          loading="lazy"
           alt={gif.alt_text || `GIF: ${gif.title}`}
+          onLoad={() => setImageLoaded(true)}
         />
         <SROnly id="modal-description">
           This modal displays a GIF image. Use the Escape key or the close
