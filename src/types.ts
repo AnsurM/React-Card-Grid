@@ -1,10 +1,12 @@
+type GifImageKey = "original" | "fixed_width";
 export interface Gif {
   id: string;
   title: string;
   alt_text: string;
   images: {
-    original: {
+    [key in GifImageKey]: {
       url: string;
+      width: number;
     };
   };
 }

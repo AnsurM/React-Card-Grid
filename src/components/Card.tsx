@@ -48,7 +48,7 @@ const StyledTitle = styled.div`
 export const Card: FC<CardProps> = ({ gif, onClick }) => {
   return (
     <StyledCard onClick={() => onClick(gif)}>
-      <StyledImage src={gif.images.original.url} alt={gif.title} />
+      <StyledImage src={gif.images.fixed_width.url} alt={gif.title} />
       <StyledTitle>
         {gif.title.substring(0, 30)}
         {gif.title.length > 30 ? "..." : ""}

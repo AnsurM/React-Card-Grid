@@ -70,7 +70,6 @@ const StyledDivider = styled.div`
 
 const StyledGif = styled.img`
   width: 100%;
-  object-fit: contain;
   aspect-ratio: 1/1;
   max-width: 480px;
   max-height: 480px;
