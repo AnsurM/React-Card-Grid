@@ -19,6 +19,7 @@ const AppContainer = styled.div`
 `;
 
 const MaxHeightContainer = styled.div`
+  overflow: scroll;
   width: 100%;
   flex: 1 1 auto;
 `;
