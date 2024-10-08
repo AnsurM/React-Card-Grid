@@ -33,7 +33,6 @@ const StyledHeading = styled.h1`
 `;
 
 const StyledPagination = styled.div`
-  width: 20%;
   flex: 0 1 auto;
 `;
 
