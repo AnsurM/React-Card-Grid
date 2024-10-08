@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useRef, KeyboardEvent } from "react";
 import { Gif } from "../types";
 import styled from "styled-components";
 import { CloseIcon } from "../assets/icons";
@@ -52,12 +52,18 @@ const StyledTitle = styled.h2`
   max-width: 80%;
 `;
 
-const StyledCloseButton = styled.span`
+const StyledCloseButton = styled.button`
   cursor: pointer;
+  color: #000;
+  background: none;
+  border: none;
+  padding: 0.25rem;
   &:hover,
   &:focus {
-    color: black;
     text-decoration: none;
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.25);
   }
 `;
 
@@ -78,7 +84,22 @@ const StyledGif = styled.img`
   margin: 1rem 0;
 `;
 
+const SROnly = styled.span`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+`;
+
 export const Modal: FC<ModalProps> = ({ gif, onClose }) => {
+  const modalRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -89,27 +110,84 @@ export const Modal: FC<ModalProps> = ({ gif, onClose }) => {
       }
     };
 
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
     document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscapeKey as any);
+
+    // Focus the close button when the modal opens
+    closeButtonRef.current?.focus();
+
+    // Save the previously focused element
+    const previouslyFocusedElement = document.activeElement as HTMLElement;
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscapeKey as any);
+
+      // Restore focus to the previously focused element when the modal closes
+      previouslyFocusedElement?.focus();
     };
   }, [onClose]);
 
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Tab") {
+      const focusableElements = modalRef.current?.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+
+      if (focusableElements) {
+        const firstElement = focusableElements[0] as HTMLElement;
+        const lastElement = focusableElements[
+          focusableElements.length - 1
+        ] as HTMLElement;
+
+        if (event.shiftKey && document.activeElement === firstElement) {
+          event.preventDefault();
+          lastElement.focus();
+        } else if (!event.shiftKey && document.activeElement === lastElement) {
+          event.preventDefault();
+          firstElement.focus();
+        }
+      }
+    }
+  };
+
   return (
-    <StyledModalContainer className="open modal-overlay">
-      <StyledModalContent className="modal-content">
+    <StyledModalContainer
+      className="open modal-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+      aria-describedby="modal-description"
+    >
+      <StyledModalContent ref={modalRef} onKeyDown={handleKeyDown}>
         <StyledHeader>
-          <StyledTitle>
+          <StyledTitle id="modal-title">
             {gif.title.substring(0, 100)}
             {gif.title.length > 100 ? "..." : ""}
           </StyledTitle>
-          <StyledCloseButton onClick={onClose}>
+          <StyledCloseButton
+            ref={closeButtonRef}
+            onClick={onClose}
+            aria-label="Close modal"
+          >
             <CloseIcon />
           </StyledCloseButton>
         </StyledHeader>
         <StyledDivider />
-        <StyledGif src={gif.images.original.url} alt={gif.alt_text} />
+        <StyledGif
+          src={gif.images.original.url}
+          alt={gif.alt_text || `GIF: ${gif.title}`}
+        />
+        <SROnly id="modal-description">
+          This modal displays a GIF image. Use the Escape key or the close
+          button to exit.
+        </SROnly>
       </StyledModalContent>
     </StyledModalContainer>
   );
