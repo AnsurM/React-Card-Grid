@@ -1,4 +1,4 @@
-import { FC, useState, KeyboardEvent } from "react";
+import { FC, useState, KeyboardEvent, useRef } from "react";
 import { Gif } from "../types";
 import { SkeletonLoader } from "./";
 
@@ -6,23 +6,31 @@ import * as Styled from "./card.styles";
 
 interface CardProps {
   gif: Gif;
-  onClick: (gif: Gif) => void;
+  onClick: (gif: Gif, element: HTMLElement) => void;
   className?: string;
 }
 
 export const Card: FC<CardProps> = ({ gif, onClick, className }) => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const handleClick = () => {
+    if (cardRef.current) {
+      onClick(gif, cardRef.current);
+    }
+  };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      onClick(gif);
+      handleClick();
     }
   };
 
   return (
     <Styled.Card
-      onClick={() => onClick(gif)}
+      ref={cardRef}
+      onClick={handleClick}
       onKeyDown={handleKeyDown}
       tabIndex={0}
       role="button"

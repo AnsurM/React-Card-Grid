@@ -9,9 +9,8 @@ interface GifGridProps {
   loading: boolean;
   error: boolean;
   gifs: Gif[];
-  onGifClick: (gif: Gif) => void;
+  onGifClick: (gif: Gif, element: HTMLElement) => void;
 }
-
 export const GifGrid: FC<GifGridProps> = ({
   limit,
   loading,
