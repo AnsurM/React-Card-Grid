@@ -1,5 +1,5 @@
 import { FC, useRef, useEffect, KeyboardEvent } from "react";
-import { Gif } from "../types";
+import { Gif } from "../utils/types";
 import { Card, ErrorIndicator, LoadingIndicator, NoResults } from "./";
 
 import * as Styled from "./gifGrid.styles";
