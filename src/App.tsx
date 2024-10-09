@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { GifGrid, Modal, Pagination } from "./components";
 import {
   GIF_CARDS_LARGE_SCREENS_LIMIT,
@@ -21,6 +21,8 @@ function App() {
   const [gifOffset, setGifOffset] = useState(0);
   const [selectedGif, setSelectedGif] = useState<Gif | null>(null);
   const [focusedCard, setFocusedCard] = useState<HTMLElement | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const gridContainerRef = useRef<HTMLDivElement>(null);
 
   const fetchTrendingGifs = async (offset: number, limit: number) => {
     setLoading(true);
@@ -42,7 +44,17 @@ function App() {
 
   useEffect(() => {
     // skip api call until mount is complete
-    if (gifCardsLimit !== 0) fetchTrendingGifs(gifOffset, gifCardsLimit);
+    if (gifCardsLimit !== 0) {
+      fetchTrendingGifs(gifOffset, gifCardsLimit);
+      // Scroll to top when offset changes i.e when user clicks on previous or next button
+      if (containerRef.current) {
+        containerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+      }
+      // Scroll to top when offset changes i.e when user clicks on previous or next button
+      if (gridContainerRef.current) {
+        gridContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
   }, [gifOffset, gifCardsLimit]);
 
   const handleGifClick = (gif: Gif, element: HTMLElement) => {
@@ -78,9 +90,10 @@ function App() {
     loading || gifOffset >= gifData.total_count - gifCardsLimit;
   const disablePreviousButton = loading || gifOffset === 0;
   return (
-    <Styled.AppContainer>
+    <Styled.AppContainer ref={containerRef}>
       <Styled.StyledHeading>React Card Grid Challenge</Styled.StyledHeading>
       <GifGrid
+        innerRef={gridContainerRef}
         limit={gifCardsLimit}
         loading={loading}
         error={error}

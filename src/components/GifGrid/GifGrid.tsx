@@ -5,6 +5,7 @@ import { Card, ErrorIndicator, LoadingIndicator, NoResults } from "..";
 import * as Styled from "./gifGrid.styles";
 
 interface GifGridProps {
+  innerRef?: React.RefObject<HTMLDivElement>;
   limit: number;
   loading: boolean;
   error: boolean;
@@ -12,6 +13,7 @@ interface GifGridProps {
   onGifClick: (gif: Gif, element: HTMLElement) => void;
 }
 export const GifGrid: FC<GifGridProps> = ({
+  innerRef,
   limit,
   loading,
   error,
@@ -64,7 +66,7 @@ export const GifGrid: FC<GifGridProps> = ({
       {hasNoResults ? (
         <NoResults />
       ) : (
-        <Styled.MaxHeightContainer>
+        <Styled.MaxHeightContainer ref={innerRef}>
           {loading ? (
             <LoadingIndicator limit={limit} />
           ) : error ? (
