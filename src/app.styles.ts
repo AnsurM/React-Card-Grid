@@ -10,6 +10,9 @@ export const AppContainer = styled.div`
   max-width: 1920px;
   margin: 0 auto;
   padding: 2rem;
+  @media (max-width: 425px) {
+    margin-bottom: 1rem;
+  }
 `;
 
 export const StyledHeading = styled.h1`
