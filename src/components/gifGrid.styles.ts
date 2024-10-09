@@ -1,0 +1,9 @@
+import styled from "styled-components";
+
+export const GifGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+  justify-items: center;
+  padding: 16px;
+`;
