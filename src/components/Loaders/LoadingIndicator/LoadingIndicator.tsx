@@ -1,5 +1,5 @@
 import { FC, useMemo } from "react";
-import { SkeletonLoader } from "./";
+import { SkeletonLoader } from "../../";
 
 import * as Styled from "./loadingIndicator.styles";
 
