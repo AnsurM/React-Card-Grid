@@ -4,37 +4,10 @@ import { Gif } from "./types";
 import { getTrendingGifs } from "./api";
 import { ErrorIndicator } from "./components/ErrorIndicator";
 
-import styled from "styled-components";
 import { NoResults } from "./components/NoResults";
+import * as Styles from "./app.styles";
 
 const LIMIT = 15;
-
-const AppContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  height: 90vh;
-  padding: 2rem;
-`;
-
-const MaxHeightContainer = styled.div`
-  overflow: scroll;
-  width: 100%;
-  flex: 1 1 auto;
-`;
-
-const StyledHeading = styled.h1`
-  font-size: 2rem;
-  font-weight: 700;
-  text-align: center;
-  flex: 0 1 auto;
-`;
-
-const StyledPagination = styled.div`
-  flex: 0 1 auto;
-`;
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -61,25 +34,25 @@ function App() {
   }, [gifOffset]);
 
   return (
-    <AppContainer>
-      <StyledHeading>React Card Grid Challenge</StyledHeading>
+    <Styles.AppContainer>
+      <Styles.StyledHeading>React Card Grid Challenge</Styles.StyledHeading>
       {loading ? (
-        <MaxHeightContainer>
+        <Styles.MaxHeightContainer>
           <LoadingIndicator />
-        </MaxHeightContainer>
+        </Styles.MaxHeightContainer>
       ) : error ? (
-        <MaxHeightContainer>
+        <Styles.MaxHeightContainer>
           <ErrorIndicator />
-        </MaxHeightContainer>
+        </Styles.MaxHeightContainer>
       ) : gifs.length > 0 ? (
-        <MaxHeightContainer>
+        <Styles.MaxHeightContainer>
           <GifGrid gifs={gifs} onGifClick={setSelectedGif} />
-        </MaxHeightContainer>
+        </Styles.MaxHeightContainer>
       ) : (
         <NoResults />
       )}
       {(loading || gifs.length > 0) && (
-        <StyledPagination>
+        <Styles.StyledPagination>
           <Pagination
             showPrevious={loading || gifOffset > 0}
             showNext={loading || gifOffset < 486}
@@ -90,12 +63,12 @@ function App() {
               gifOffset < 486 && setGifOffset(gifOffset + LIMIT)
             }
           />
-        </StyledPagination>
+        </Styles.StyledPagination>
       )}
       {selectedGif && (
         <Modal gif={selectedGif} onClose={() => setSelectedGif(null)} />
       )}
-    </AppContainer>
+    </Styles.AppContainer>
   );
 }
 

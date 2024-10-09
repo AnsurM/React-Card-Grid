@@ -9,9 +9,9 @@
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
 - [Usage](#usage)
+- [Deployment](#deployment)
 - [Testing](#testing)
 - [Accessibility](#accessibility)
-- [Contributing](#contributing)
 - [License](#license)
 
 ## Overview
