@@ -30,9 +30,6 @@ export const SkeletonContainer = styled.div`
   z-index: 1;
   width: 100%;
   height: 60%;
-  &.loaded {
-    display: none;
-  }
 `;
 
 export const Title = styled.div`

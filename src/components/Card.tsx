@@ -13,9 +13,11 @@ export const Card: FC<CardProps> = ({ gif, onClick }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   return (
     <Styled.Card onClick={() => onClick(gif)}>
-      <Styled.SkeletonContainer className={isLoaded ? "loaded" : ""}>
-        <SkeletonLoader />
-      </Styled.SkeletonContainer>
+      {!isLoaded && (
+        <Styled.SkeletonContainer>
+          <SkeletonLoader />
+        </Styled.SkeletonContainer>
+      )}
       <Styled.Image
         src={gif.images.fixed_width.url}
         alt={gif.title}
