@@ -7,6 +7,8 @@ export const AppContainer = styled.div`
   justify-content: center;
   gap: 1rem;
   height: 90vh;
+  max-width: 1920px;
+  margin: 0 auto;
   padding: 2rem;
 `;
 

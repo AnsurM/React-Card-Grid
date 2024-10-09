@@ -22,7 +22,8 @@ export const ModalContent = styled.div`
   flex-direction: column;
   align-items: center;
   position: relative;
-  width: 80%;
+  max-height: 80%;
+  max-width: 80%;
   background-color: #fefefe;
   margin: auto;
   padding: 20px;
@@ -72,7 +73,7 @@ export const Gif = styled.img`
   aspect-ratio: 1/1;
   border-radius: 1rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  margin: 1rem 0;
+  margin: auto 0;
   visibility: hidden;
   max-width: 480px;
   &.loaded {
@@ -86,9 +87,6 @@ export const SkeletonContainer = styled.div`
   max-width: 480px;
   padding: 1rem 0;
   aspect-ratio: 1/1;
-  &.loaded {
-    display: none;
-  }
 `;
 
 export const SROnly = styled.span`
