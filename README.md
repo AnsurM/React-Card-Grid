@@ -2,20 +2,20 @@
 
 ## Table of Contents
 
-- [📝 Overview](#📝-overview)
-- [👀 Preview](#👀-preview)
-- [✨ Features](#✨-features)
-- [🛠️ Technologies Used](#🛠️-technologies-used)
-- [🏗️ Project Structure](#🏗️-project-structure)
-- [🚀 Getting Started](#🚀-getting-started)
-  - [📋 Prerequisites](#📋-prerequisites)
-  - [⚙️ Installation](#⚙️-installation)
-- [🖥️ Usage](#🖥️-usage)
-- [🚢 Deployment](#🚢-deployment)
-- [🧪 Testing](#🧪-testing)
-- [♿ Accessibility](#♿-accessibility)
-- [🚀 Next Steps](#🚀-next-steps)
-- [📄 License](#📄-license)
+- [📝 Overview](#-overview)
+- [👀 Preview](#-preview)
+- [✨ Features](#-features)
+- [🛠️ Technologies Used](#-technologies-used)
+- [🏗️ Project Structure](#-project-structure)
+- [🚀 Getting Started](#-getting-started)
+  - [📋 Prerequisites](#-prerequisites)
+  - [⚙️ Installation](#-installation)
+- [🖥️ Usage](#-usage)
+- [🚢 Deployment](#-deployment)
+- [🧪 Testing](#-testing)
+- [♿ Accessibility](#-accessibility)
+- [🚀 Next Steps](#-next-steps)
+- [📄 License](#-license)
 
 ## 📝 Overview
 
