@@ -10,12 +10,6 @@ export const AppContainer = styled.div`
   padding: 2rem;
 `;
 
-export const MaxHeightContainer = styled.div`
-  overflow: scroll;
-  width: 100%;
-  flex: 1 1 auto;
-`;
-
 export const StyledHeading = styled.h1`
   font-size: 2rem;
   font-weight: 700;

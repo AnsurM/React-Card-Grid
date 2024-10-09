@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
-import { GifGrid, LoadingIndicator, Modal, Pagination } from "./components";
+import { GifGrid, Modal, Pagination } from "./components";
 import { Gif } from "./types";
 import { getTrendingGifs } from "./api";
-import { ErrorIndicator } from "./components/ErrorIndicator";
 
-import { NoResults } from "./components/NoResults";
-import * as Styles from "./app.styles";
+import * as Styled from "./app.styles";
 
 const LIMIT = 15;
 
@@ -33,26 +31,18 @@ function App() {
     fetchTrendingGifs(gifOffset);
   }, [gifOffset]);
 
+  const showPagination = loading || gifs.length > 0;
   return (
-    <Styles.AppContainer>
-      <Styles.StyledHeading>React Card Grid Challenge</Styles.StyledHeading>
-      {loading ? (
-        <Styles.MaxHeightContainer>
-          <LoadingIndicator />
-        </Styles.MaxHeightContainer>
-      ) : error ? (
-        <Styles.MaxHeightContainer>
-          <ErrorIndicator />
-        </Styles.MaxHeightContainer>
-      ) : gifs.length > 0 ? (
-        <Styles.MaxHeightContainer>
-          <GifGrid gifs={gifs} onGifClick={setSelectedGif} />
-        </Styles.MaxHeightContainer>
-      ) : (
-        <NoResults />
-      )}
-      {(loading || gifs.length > 0) && (
-        <Styles.StyledPagination>
+    <Styled.AppContainer>
+      <Styled.StyledHeading>React Card Grid Challenge</Styled.StyledHeading>
+      <GifGrid
+        loading={loading}
+        error={error}
+        gifs={gifs}
+        onGifClick={setSelectedGif}
+      />
+      {showPagination && (
+        <Styled.StyledPagination>
           <Pagination
             showPrevious={loading || gifOffset > 0}
             showNext={loading || gifOffset < 486}
@@ -63,12 +53,12 @@ function App() {
               gifOffset < 486 && setGifOffset(gifOffset + LIMIT)
             }
           />
-        </Styles.StyledPagination>
+        </Styled.StyledPagination>
       )}
       {selectedGif && (
         <Modal gif={selectedGif} onClose={() => setSelectedGif(null)} />
       )}
-    </Styles.AppContainer>
+    </Styled.AppContainer>
   );
 }
 

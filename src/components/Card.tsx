@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { Gif } from "../types";
-import SkeletonLoader from "./SkeletonLoader";
+import { SkeletonLoader } from "./";
 
 import * as Styled from "./card.styles";
 

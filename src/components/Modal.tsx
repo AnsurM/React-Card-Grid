@@ -1,7 +1,7 @@
 import { FC, useEffect, useRef, KeyboardEvent, useState } from "react";
 import { Gif } from "../types";
 import { CloseIcon } from "../assets/icons";
-import SkeletonLoader from "./SkeletonLoader";
+import { SkeletonLoader } from "./";
 
 import * as Styled from "./modal.styles";
 

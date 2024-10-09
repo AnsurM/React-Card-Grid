@@ -7,3 +7,9 @@ export const GifGrid = styled.div`
   justify-items: center;
   padding: 16px;
 `;
+
+export const MaxHeightContainer = styled.div`
+  overflow-y: scroll;
+  width: 100%;
+  flex: 1 1 auto;
+`;

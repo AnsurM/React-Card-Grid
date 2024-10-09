@@ -1,5 +1,5 @@
 import { FC } from "react";
-import SkeletonLoader from "./SkeletonLoader";
+import { SkeletonLoader } from "./";
 
 import * as Styled from "./loadingIndicator.styles";
 
