@@ -38,41 +38,24 @@ export const GifGrid: FC<GifGridProps> = ({
     const currentRow = currentCell.parentElement;
     if (!currentRow) return;
 
-    const rows = Array.from(
-      gridRef.current?.querySelectorAll('[role="row"]') || []
-    );
-    const currentRowIndex = rows.indexOf(currentRow);
-
     switch (event.key) {
+      case "ArrowUp":
       case "ArrowRight":
+        event.preventDefault();
         (
-          currentRow.nextElementSibling?.querySelector(
-            '[role="gridcell"]'
-          ) as HTMLElement
-        )?.focus();
-        break;
-      case "ArrowLeft":
-        (
-          currentRow.previousElementSibling?.querySelector(
-            '[role="gridcell"]'
-          ) as HTMLElement
+          currentRow.nextElementSibling?.querySelector(".card") as HTMLElement
         )?.focus();
         break;
       case "ArrowDown":
+      case "ArrowLeft":
         event.preventDefault();
         (
-          rows[currentRowIndex + 1]?.querySelector(
-            '[role="gridcell"]'
+          currentRow.previousElementSibling?.querySelector(
+            ".card"
           ) as HTMLElement
         )?.focus();
         break;
-      case "ArrowUp":
-        event.preventDefault();
-        (
-          rows[currentRowIndex - 1]?.querySelector(
-            '[role="gridcell"]'
-          ) as HTMLElement
-        )?.focus();
+      default:
         break;
     }
   };
@@ -97,13 +80,14 @@ export const GifGrid: FC<GifGridProps> = ({
               >
                 {gifs.map((gif, index) => (
                   <div key={gif.id} role="row" aria-rowindex={index + 1}>
-                    <div role="gridcell" tabIndex={0}>
+                    <div role="gridcell">
                       <Card
                         gif={gif}
                         onClick={onGifClick}
                         aria-label={`GIF ${index + 1} of ${gifs.length}: ${
                           gif.title
                         }`}
+                        className="card"
                       />
                     </div>
                   </div>

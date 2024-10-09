@@ -13,6 +13,8 @@ export const Card = styled.div`
   &:hover,
   &:focus {
     transform: scale(1.1);
+    outline: 2px solid #007bff; // Or any color that provides sufficient contrast
+    outline-offset: 2px;
   }
 `;
 
