@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, KeyboardEvent, useRef } from "react";
 import { Gif } from "../types";
 import { SkeletonLoader } from "./";
 
@@ -6,13 +6,37 @@ import * as Styled from "./card.styles";
 
 interface CardProps {
   gif: Gif;
-  onClick: (gif: Gif) => void;
+  onClick: (gif: Gif, element: HTMLElement) => void;
+  className?: string;
 }
 
-export const Card: FC<CardProps> = ({ gif, onClick }) => {
+export const Card: FC<CardProps> = ({ gif, onClick, className }) => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const handleClick = () => {
+    if (cardRef.current) {
+      onClick(gif, cardRef.current);
+    }
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      handleClick();
+    }
+  };
+
   return (
-    <Styled.Card onClick={() => onClick(gif)}>
+    <Styled.Card
+      ref={cardRef}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+      role="button"
+      aria-label={`View ${gif.title}`}
+      className={className}
+    >
       {!isLoaded && (
         <Styled.SkeletonContainer>
           <SkeletonLoader />
@@ -20,11 +44,11 @@ export const Card: FC<CardProps> = ({ gif, onClick }) => {
       )}
       <Styled.Image
         src={gif.images.fixed_width.url}
-        alt={gif.title}
+        alt=""
         onLoad={() => setIsLoaded(true)}
         loading="lazy"
       />
-      <Styled.Title>
+      <Styled.Title aria-hidden="true">
         {gif.title.substring(0, 30)}
         {gif.title.length > 30 ? "..." : ""}
       </Styled.Title>

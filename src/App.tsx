@@ -15,6 +15,7 @@ function App() {
   const [gifs, setGifs] = useState<Gif[]>([]);
   const [gifOffset, setGifOffset] = useState(0);
   const [selectedGif, setSelectedGif] = useState<Gif | null>(null);
+  const [focusedCard, setFocusedCard] = useState<HTMLElement | null>(null);
 
   const fetchTrendingGifs = async (offset: number, limit: number) => {
     setLoading(true);
@@ -28,6 +29,23 @@ function App() {
       setGifs([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    // skip api call before mount is complete
+    if (limit !== 0) fetchTrendingGifs(gifOffset, limit);
+  }, [gifOffset, limit]);
+
+  const handleGifClick = (gif: Gif, element: HTMLElement) => {
+    setSelectedGif(gif);
+    setFocusedCard(element);
+  };
+
+  const onCloseModal = () => {
+    setSelectedGif(null);
+    if (focusedCard) {
+      focusedCard.focus();
     }
   };
 
@@ -47,11 +65,6 @@ function App() {
     };
   }, []);
 
-  useEffect(() => {
-    // skip api call before mount is complete
-    if (limit !== 0) fetchTrendingGifs(gifOffset, limit);
-  }, [gifOffset, limit]);
-
   const showPagination = loading || gifs.length > 0;
   return (
     <Styled.AppContainer>
@@ -61,7 +74,7 @@ function App() {
         loading={loading}
         error={error}
         gifs={gifs}
-        onGifClick={setSelectedGif}
+        onGifClick={handleGifClick}
       />
       {showPagination && (
         <Styled.StyledPagination>
@@ -77,9 +90,7 @@ function App() {
           />
         </Styled.StyledPagination>
       )}
-      {selectedGif && (
-        <Modal gif={selectedGif} onClose={() => setSelectedGif(null)} />
-      )}
+      {selectedGif && <Modal gif={selectedGif} onClose={onCloseModal} />}
     </Styled.AppContainer>
   );
 }

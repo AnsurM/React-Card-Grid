@@ -1,21 +1,5 @@
 import styled from "styled-components";
 
-export const Card = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 200px;
-  aspect-ratio: 1/1;
-  position: relative;
-  transition: transform 0.3s ease-in-out;
-  cursor: pointer;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  &:hover,
-  &:focus {
-    transform: scale(1.1);
-  }
-`;
-
 export const Image = styled.img`
   width: 100%;
   height: 60%;
@@ -45,4 +29,27 @@ export const Title = styled.div`
   box-sizing: border-box;
   overflow: hidden;
   border-radius: 0 0 5px 5px;
+`;
+
+export const Card = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 200px;
+  aspect-ratio: 1/1;
+  position: relative;
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  &:hover,
+  &:focus {
+    transform: scale(1.1);
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+
+    ${Title} {
+      background: rgb(0 123 255 / 40%);
+      color: white;
+    }
+  }
 `;
