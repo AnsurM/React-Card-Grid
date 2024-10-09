@@ -46,6 +46,7 @@ export const Title = styled.h2`
 `;
 
 export const CloseButton = styled.button`
+  display: flex;
   cursor: pointer;
   color: #000;
   background: none;
