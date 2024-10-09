@@ -1,4 +1,5 @@
 import { FC, useEffect, useRef, KeyboardEvent, useState } from "react";
+import { MODAL_TITLE_LENGTH } from "../utils/constants";
 import { Gif } from "../utils/types";
 import { CloseIcon } from "../assets/icons";
 import { SkeletonLoader } from "./";
@@ -83,8 +84,8 @@ export const Modal: FC<ModalProps> = ({ gif, onClose }) => {
       <Styled.ModalContent ref={modalRef} onKeyDown={handleKeyDown}>
         <Styled.Header>
           <Styled.Title id="modal-title">
-            {gif.title.substring(0, 100)}
-            {gif.title.length > 100 ? "..." : ""}
+            {gif.title.substring(0, MODAL_TITLE_LENGTH)}
+            {gif.title.length > MODAL_TITLE_LENGTH ? "..." : ""}
           </Styled.Title>
           <Styled.CloseButton
             ref={closeButtonRef}

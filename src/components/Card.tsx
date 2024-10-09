@@ -1,4 +1,5 @@
 import { FC, useState, KeyboardEvent, useRef } from "react";
+import { CARD_TITLE_LENGTH } from "../utils/constants";
 import { Gif } from "../utils/types";
 import { SkeletonLoader } from "./";
 
@@ -49,8 +50,8 @@ export const Card: FC<CardProps> = ({ gif, onClick, className }) => {
         loading="lazy"
       />
       <Styled.Title aria-hidden="true">
-        {gif.title.substring(0, 30)}
-        {gif.title.length > 30 ? "..." : ""}
+        {gif.title.substring(0, CARD_TITLE_LENGTH)}
+        {gif.title.length > CARD_TITLE_LENGTH ? "..." : ""}
       </Styled.Title>
     </Styled.Card>
   );

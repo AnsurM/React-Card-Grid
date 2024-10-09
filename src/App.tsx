@@ -1,18 +1,23 @@
 import { useEffect, useState } from "react";
 import { GifGrid, Modal, Pagination } from "./components";
-import { Gif } from "./types";
+import {
+  GIF_CARDS_LARGE_SCREENS_LIMIT,
+  GIF_CARDS_SMALL_SCREENS_LIMIT,
+  LARGE_SCREEN_WIDTH,
+} from "./utils/constants";
+import { Gif, GifsWithTotalCount } from "./utils/types";
 import { giphyApi } from "./utils/api";
 
 import * as Styled from "./app.styles";
 
-const LARGE_SCREEN_LIMIT = 50;
-const SMALL_SCREEN_LIMIT = 21;
-
 function App() {
-  const [limit, setLimit] = useState(0);
+  const [gifCardsLimit, setGifCardsLimit] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [gifs, setGifs] = useState<Gif[]>([]);
+  const [gifData, setGifData] = useState<GifsWithTotalCount>({
+    gifs: [],
+    total_count: 0,
+  });
   const [gifOffset, setGifOffset] = useState(0);
   const [selectedGif, setSelectedGif] = useState<Gif | null>(null);
   const [focusedCard, setFocusedCard] = useState<HTMLElement | null>(null);
@@ -21,21 +26,24 @@ function App() {
     setLoading(true);
     try {
       const response = await giphyApi.getTrendingGifs({ offset, limit });
-      setGifs(response.data);
+      setGifData({
+        gifs: response.data,
+        total_count: response.pagination.total_count,
+      });
       setError(false);
     } catch (error) {
       console.error("Error fetching trending gifs:", error);
       setError(true);
-      setGifs([]);
+      setGifData({ gifs: [], total_count: 0 });
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    // skip api call before mount is complete
-    if (limit !== 0) fetchTrendingGifs(gifOffset, limit);
-  }, [gifOffset, limit]);
+    // skip api call until mount is complete
+    if (gifCardsLimit !== 0) fetchTrendingGifs(gifOffset, gifCardsLimit);
+  }, [gifOffset, gifCardsLimit]);
 
   const handleGifClick = (gif: Gif, element: HTMLElement) => {
     setSelectedGif(gif);
@@ -51,10 +59,10 @@ function App() {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 1919) {
-        setLimit(LARGE_SCREEN_LIMIT);
+      if (window.innerWidth >= LARGE_SCREEN_WIDTH) {
+        setGifCardsLimit(GIF_CARDS_LARGE_SCREENS_LIMIT);
       } else {
-        setLimit(SMALL_SCREEN_LIMIT);
+        setGifCardsLimit(GIF_CARDS_SMALL_SCREENS_LIMIT);
       }
     };
     handleResize();
@@ -65,28 +73,38 @@ function App() {
     };
   }, []);
 
-  const showPagination = loading || gifs.length > 0;
+  const showPagination = gifData.gifs.length > 0;
+  const disableNextButton =
+    loading || gifOffset >= gifData.total_count - gifCardsLimit;
+  const disablePreviousButton = loading || gifOffset === 0;
   return (
     <Styled.AppContainer>
       <Styled.StyledHeading>React Card Grid Challenge</Styled.StyledHeading>
       <GifGrid
-        limit={limit}
+        limit={gifCardsLimit}
         loading={loading}
         error={error}
-        gifs={gifs}
+        gifs={gifData.gifs}
         onGifClick={handleGifClick}
       />
       {showPagination && (
         <Styled.StyledPagination>
           <Pagination
-            showPrevious={loading || gifOffset > 0}
-            showNext={loading || gifOffset < 486}
-            onClickPrevious={() =>
-              gifOffset > 0 && setGifOffset(Math.max(0, gifOffset - limit))
-            }
-            onClickNext={() =>
-              gifOffset < 486 && setGifOffset(gifOffset + limit)
-            }
+            disablePrevious={disablePreviousButton}
+            disableNext={disableNextButton}
+            onClickPrevious={() => {
+              // this calculation ensures that the offset will never be negative
+              const previousOffset = Math.max(gifOffset - gifCardsLimit, 0);
+              setGifOffset(previousOffset);
+            }}
+            onClickNext={() => {
+              // this calculation ensures that the offset + limit will never be more than the total_count provided by api
+              const nextOffset = Math.min(
+                gifOffset + gifCardsLimit,
+                gifData.total_count - gifCardsLimit
+              );
+              setGifOffset(nextOffset);
+            }}
           />
         </Styled.StyledPagination>
       )}

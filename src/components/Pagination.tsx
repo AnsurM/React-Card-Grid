@@ -2,15 +2,15 @@ import { FC, KeyboardEvent } from "react";
 
 import * as Styled from "./pagination.styles";
 interface PaginationProps {
-  showPrevious: boolean;
-  showNext: boolean;
+  disablePrevious: boolean;
+  disableNext: boolean;
   onClickPrevious: () => void;
   onClickNext: () => void;
 }
 
 export const Pagination: FC<PaginationProps> = ({
-  showPrevious,
-  showNext,
+  disablePrevious,
+  disableNext,
   onClickPrevious,
   onClickNext,
 }) => {
@@ -29,18 +29,18 @@ export const Pagination: FC<PaginationProps> = ({
       <Styled.PaginationButton
         onClick={onClickPrevious}
         onKeyDown={(e) => handleKeyDown(e, onClickPrevious)}
-        disabled={!showPrevious}
+        disabled={disablePrevious}
         aria-label="Go to previous page"
-        aria-disabled={!showPrevious}
+        aria-disabled={disablePrevious}
       >
         Previous
       </Styled.PaginationButton>
       <Styled.PaginationButton
         onClick={onClickNext}
         onKeyDown={(e) => handleKeyDown(e, onClickNext)}
-        disabled={!showNext}
+        disabled={disableNext}
         aria-label="Go to next page"
-        aria-disabled={!showNext}
+        aria-disabled={disableNext}
       >
         Next
       </Styled.PaginationButton>
