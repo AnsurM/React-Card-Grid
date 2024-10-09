@@ -21,9 +21,11 @@ function App() {
     try {
       const response = await getTrendingGifs({ offset, limit });
       setGifs(response.data);
+      setError(false);
     } catch (error) {
       console.error("Error fetching trending gifs:", error);
       setError(true);
+      setGifs([]);
     } finally {
       setLoading(false);
     }
