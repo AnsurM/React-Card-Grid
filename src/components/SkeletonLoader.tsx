@@ -1,5 +1,5 @@
 import * as Styled from "./skeletonLoader.styles";
 
-export default function SkeletonLoader() {
+export const SkeletonLoader = () => {
   return <Styled.SkeletonLoader />;
-}
+};

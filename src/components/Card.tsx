@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { Gif } from "../types";
-import SkeletonLoader from "./SkeletonLoader";
+import { SkeletonLoader } from "./";
 
 import * as Styled from "./card.styles";
 
@@ -13,9 +13,11 @@ export const Card: FC<CardProps> = ({ gif, onClick }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   return (
     <Styled.Card onClick={() => onClick(gif)}>
-      <Styled.SkeletonContainer className={isLoaded ? "loaded" : ""}>
-        <SkeletonLoader />
-      </Styled.SkeletonContainer>
+      {!isLoaded && (
+        <Styled.SkeletonContainer>
+          <SkeletonLoader />
+        </Styled.SkeletonContainer>
+      )}
       <Styled.Image
         src={gif.images.fixed_width.url}
         alt={gif.title}
