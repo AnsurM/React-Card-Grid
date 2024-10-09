@@ -59,6 +59,7 @@ export const GifGrid: FC<GifGridProps> = ({
         )?.focus();
         break;
       case "ArrowDown":
+        event.preventDefault();
         (
           rows[currentRowIndex + 1]?.querySelector(
             '[role="gridcell"]'
@@ -66,6 +67,7 @@ export const GifGrid: FC<GifGridProps> = ({
         )?.focus();
         break;
       case "ArrowUp":
+        event.preventDefault();
         (
           rows[currentRowIndex - 1]?.querySelector(
             '[role="gridcell"]'
