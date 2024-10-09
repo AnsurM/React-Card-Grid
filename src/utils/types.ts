@@ -1,4 +1,5 @@
 type GifImageKey = "original" | "fixed_width";
+
 export interface Gif {
   id: string;
   title: string;
@@ -9,6 +10,11 @@ export interface Gif {
       width: number;
     };
   };
+}
+
+export interface GifsWithTotalCount {
+  gifs: Gif[];
+  total_count: number;
 }
 
 export interface Pagination {

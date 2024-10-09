@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef, KeyboardEvent, useState } from "react";
-import { Gif } from "../types";
+import { Gif } from "../utils/types";
 import { CloseIcon } from "../assets/icons";
 import { SkeletonLoader } from "./";
 

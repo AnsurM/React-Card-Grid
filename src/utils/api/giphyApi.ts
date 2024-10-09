@@ -1,4 +1,4 @@
-import { Gif, Pagination } from "../../types";
+import { Gif, Pagination } from "../types";
 import {
   GIPHY_SEARCH_ENDPOINT,
   GIPHY_TRENDING_ENDPOINT,

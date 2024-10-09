@@ -1,5 +1,5 @@
 import { FC, useState, KeyboardEvent, useRef } from "react";
-import { Gif } from "../types";
+import { Gif } from "../utils/types";
 import { SkeletonLoader } from "./";
 
 import * as Styled from "./card.styles";
