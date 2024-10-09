@@ -95,9 +95,11 @@ export const Modal: FC<ModalProps> = ({ gif, onClose }) => {
           </Styled.CloseButton>
         </Styled.Header>
         <Styled.Divider />
-        <Styled.SkeletonContainer className={imageLoaded ? "loaded" : ""}>
-          <SkeletonLoader />
-        </Styled.SkeletonContainer>
+        {!imageLoaded && (
+          <Styled.SkeletonContainer>
+            <SkeletonLoader />
+          </Styled.SkeletonContainer>
+        )}
         <Styled.Gif
           className={imageLoaded ? "loaded" : ""}
           src={gif.images.original.url}
