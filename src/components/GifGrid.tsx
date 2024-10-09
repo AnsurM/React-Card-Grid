@@ -5,6 +5,7 @@ import { Card, ErrorIndicator, LoadingIndicator, NoResults } from "./";
 import * as Styled from "./gifGrid.styles";
 
 interface GifGridProps {
+  limit: number;
   loading: boolean;
   error: boolean;
   gifs: Gif[];
@@ -12,6 +13,7 @@ interface GifGridProps {
 }
 
 export const GifGrid: FC<GifGridProps> = ({
+  limit,
   loading,
   error,
   gifs,
@@ -25,7 +27,7 @@ export const GifGrid: FC<GifGridProps> = ({
       ) : (
         <Styled.MaxHeightContainer>
           {loading ? (
-            <LoadingIndicator />
+            <LoadingIndicator limit={limit} />
           ) : error ? (
             <ErrorIndicator />
           ) : (
