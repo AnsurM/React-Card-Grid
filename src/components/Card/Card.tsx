@@ -1,7 +1,7 @@
 import { FC, useState, KeyboardEvent, useRef } from "react";
-import { CARD_TITLE_LENGTH } from "../utils/constants";
-import { Gif } from "../utils/types";
-import { SkeletonLoader } from "./";
+import { CARD_TITLE_LENGTH } from "../../utils/constants";
+import { Gif } from "../../utils/types";
+import { SkeletonLoader } from "..";
 
 import * as Styled from "./card.styles";
 

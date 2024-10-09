@@ -1,11 +1,11 @@
-import { Card } from "./Card";
-import { ErrorIndicator } from "./ErrorIndicator";
-import { GifGrid } from "./GifGrid";
-import { LoadingIndicator } from "./LoadingIndicator";
-import { Modal } from "./Modal";
-import { NoResults } from "./NoResults";
-import { Pagination } from "./Pagination";
-import { SkeletonLoader } from "./SkeletonLoader";
+import { Card } from "./Card/Card";
+import { ErrorIndicator } from "./ErrorIndicator/ErrorIndicator";
+import { GifGrid } from "./GifGrid/GifGrid";
+import { LoadingIndicator } from "./Loaders/LoadingIndicator/LoadingIndicator";
+import { Modal } from "./Modal/Modal";
+import { NoResults } from "./NoResults/NoResults";
+import { Pagination } from "./Pagination/Pagination";
+import { SkeletonLoader } from "./Loaders/SkeletonLoader/SkeletonLoader";
 
 export {
   Card,

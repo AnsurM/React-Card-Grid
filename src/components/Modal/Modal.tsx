@@ -1,8 +1,8 @@
 import { FC, useEffect, useRef, KeyboardEvent, useState } from "react";
-import { MODAL_TITLE_LENGTH } from "../utils/constants";
-import { Gif } from "../utils/types";
-import { CloseIcon } from "../assets/icons";
-import { SkeletonLoader } from "./";
+import { MODAL_TITLE_LENGTH } from "../../utils/constants";
+import { Gif } from "../../utils/types";
+import { CloseIcon } from "../../assets/icons";
+import { SkeletonLoader } from "..";
 
 import * as Styled from "./modal.styles";
 
@@ -26,14 +26,16 @@ export const Modal: FC<ModalProps> = ({ gif, onClose }) => {
       }
     };
 
-    const handleEscapeKey = (event: KeyboardEvent) => {
+    const handleEscapeKey = (event: KeyboardEvent<HTMLDivElement>) => {
       if (event.key === "Escape") {
         onClose();
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleEscapeKey as any);
+    document.addEventListener("keydown", (event) =>
+      handleEscapeKey(event as unknown as KeyboardEvent<HTMLDivElement>)
+    );
 
     // Focus the close button when the modal opens
     closeButtonRef.current?.focus();
@@ -43,7 +45,9 @@ export const Modal: FC<ModalProps> = ({ gif, onClose }) => {
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEscapeKey as any);
+      document.removeEventListener("keydown", (event) =>
+        handleEscapeKey(event as unknown as KeyboardEvent<HTMLDivElement>)
+      );
 
       // Restore focus to the previously focused element when the modal closes
       previouslyFocusedElement?.focus();
