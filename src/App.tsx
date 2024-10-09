@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { GifGrid, Modal, Pagination } from "./components";
 import { Gif } from "./types";
-import { getTrendingGifs } from "./api";
+import { giphyApi } from "./utils/api";
 
 import * as Styled from "./app.styles";
 
@@ -20,7 +20,7 @@ function App() {
   const fetchTrendingGifs = async (offset: number, limit: number) => {
     setLoading(true);
     try {
-      const response = await getTrendingGifs({ offset, limit });
+      const response = await giphyApi.getTrendingGifs({ offset, limit });
       setGifs(response.data);
       setError(false);
     } catch (error) {

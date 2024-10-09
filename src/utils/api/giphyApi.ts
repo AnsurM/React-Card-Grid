@@ -1,4 +1,8 @@
-import { Gif, Pagination } from "./types";
+import { Gif, Pagination } from "../../types";
+import {
+  GIPHY_SEARCH_ENDPOINT,
+  GIPHY_TRENDING_ENDPOINT,
+} from "./giphyApi.constants";
 
 interface GifResponse {
   data: Gif[];
@@ -20,9 +24,7 @@ export const getTrendingGifs = async ({
   limit,
 }: GetTrendingGifsParams): Promise<GifResponse> => {
   const response = await fetch(
-    `${import.meta.env.VITE_GIPHY_API_URL}/trending?api_key=${
-      import.meta.env.VITE_GIPHY_API_KEY
-    }&limit=${limit}&offset=${offset}&rating=g`
+    `${GIPHY_TRENDING_ENDPOINT}&limit=${limit}&offset=${offset}&rating=g`
   );
   const data = await response.json();
   return data;
@@ -40,9 +42,7 @@ export const getSearchGifs = async ({
   limit,
 }: GetSearchGifsParams): Promise<GifResponse> => {
   const response = await fetch(
-    `${import.meta.env.VITE_GIPHY_API_URL}/search?api_key=${
-      import.meta.env.VITE_GIPHY_API_KEY
-    }&q=${query}&limit=${limit}&offset=${offset}&rating=g`
+    `${GIPHY_SEARCH_ENDPOINT}&q=${query}&limit=${limit}&offset=${offset}&rating=g`
   );
   const data = await response.json();
   return data;
