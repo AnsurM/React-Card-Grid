@@ -1,8 +1,39 @@
 import { KeyboardEvent as ReactKeyboardEvent } from "react";
 import { useEventListener, CallbackEvent } from "./eventListeners";
 
+/**
+ * Type representing the event element for keyboard events.
+ */
 type EventElement = HTMLDivElement | HTMLButtonElement;
+
+/**
+ * Type representing a keyboard event, extending React's KeyboardEvent.
+ */
 export type KeyboardEvent = ReactKeyboardEvent<EventElement>;
+
+/**
+ * Enum representing keyboard key codes.
+ * This enum provides a mapping of common keyboard keys to their lowercase string representations.
+ */
+enum KeyDictionary {
+  LEFT = "arrowleft",
+  RIGHT = "arrowright",
+  UP = "arrowup",
+  DOWN = "arrowdown",
+  ENTER = "enter",
+  SPACE = " ",
+  ESCAPE = "escape",
+  TAB = "tab",
+}
+
+/**
+ * Type representing arrow keys.
+ */
+type ArrowKey =
+  | KeyDictionary.LEFT
+  | KeyDictionary.RIGHT
+  | KeyDictionary.UP
+  | KeyDictionary.DOWN;
 
 /**
  * Checks if the pressed key is the Enter key.
@@ -10,7 +41,7 @@ export type KeyboardEvent = ReactKeyboardEvent<EventElement>;
  * @returns {boolean} True if the Enter key was pressed, false otherwise.
  */
 const isEnterKey = (event: KeyboardEvent) => {
-  return event.key === "Enter";
+  return event.key.toLowerCase() === KeyDictionary.ENTER;
 };
 
 /**
@@ -19,7 +50,7 @@ const isEnterKey = (event: KeyboardEvent) => {
  * @returns {boolean} True if the Escape key was pressed, false otherwise.
  */
 const isEscapeKey = (event: KeyboardEvent) => {
-  return event.key === "Escape";
+  return event.key.toLowerCase() === KeyDictionary.ESCAPE;
 };
 
 /**
@@ -28,7 +59,7 @@ const isEscapeKey = (event: KeyboardEvent) => {
  * @returns {boolean} True if the Tab key was pressed, false otherwise.
  */
 const isTabKey = (event: KeyboardEvent) => {
-  return event.key === "Tab";
+  return event.key.toLowerCase() === KeyDictionary.TAB;
 };
 
 /**
@@ -46,7 +77,7 @@ const isShiftTabKey = (event: KeyboardEvent) => {
  * @returns {boolean} True if the Space key was pressed, false otherwise.
  */
 const isSpaceKey = (event: KeyboardEvent) => {
-  return event.key === " ";
+  return event.key.toLowerCase() === KeyDictionary.SPACE;
 };
 
 /**
@@ -55,19 +86,12 @@ const isSpaceKey = (event: KeyboardEvent) => {
  * @returns {boolean} True if an arrow key was pressed, false otherwise.
  */
 const isArrowKey = (event: KeyboardEvent) => {
-  const isLeftArrow = event.key === "ArrowLeft";
-  const isRightArrow = event.key === "ArrowRight";
-  const isUpArrow = event.key === "ArrowUp";
-  const isDownArrow = event.key === "ArrowDown";
+  const isLeftArrow = event.key.toLowerCase() === KeyDictionary.LEFT;
+  const isRightArrow = event.key.toLowerCase() === KeyDictionary.RIGHT;
+  const isUpArrow = event.key.toLowerCase() === KeyDictionary.UP;
+  const isDownArrow = event.key.toLowerCase() === KeyDictionary.DOWN;
   return isLeftArrow || isRightArrow || isUpArrow || isDownArrow;
 };
-
-enum ArrowKey {
-  LEFT = "arrowleft",
-  RIGHT = "arrowright",
-  UP = "arrowup",
-  DOWN = "arrowdown",
-}
 
 /**
  * Represents information about a key press event.
@@ -131,12 +155,32 @@ type NavigationInfo = {
 const getNavigationInfo = (event: KeyboardEvent): NavigationInfo => {
   const { isArrow, arrowKey } = getKeyPressInfo(event);
   const isNext =
-    isArrow && (arrowKey === ArrowKey.RIGHT || arrowKey === ArrowKey.DOWN);
+    isArrow &&
+    (arrowKey === KeyDictionary.RIGHT || arrowKey === KeyDictionary.DOWN);
   return {
     isNext,
     isPrevious: isArrow && !isNext,
   };
 };
 
+/**
+ * Determines if a keyboard event represents a "click" action.
+ * This function checks if the event is triggered by either the Space or Enter key.
+ *
+ * @param {KeyboardEvent} event - The keyboard event to check.
+ * @returns {boolean} True if the event is a Space or Enter key press, false otherwise.
+ */
+const isKeyboardClick = (event: KeyboardEvent) => {
+  return isSpaceKey(event) || isEnterKey(event);
+};
+
+/**
+ * Export types and functions for use in other modules.
+ */
 export type { KeyPressInfo, NavigationInfo };
-export { useKeyDownEventListener, getKeyPressInfo, getNavigationInfo };
+export {
+  useKeyDownEventListener,
+  getKeyPressInfo,
+  getNavigationInfo,
+  isKeyboardClick,
+};
