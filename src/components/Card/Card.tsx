@@ -4,7 +4,6 @@ import { Gif } from "../../utils/types";
 import { SkeletonLoader } from "..";
 
 import * as Styled from "./card.styles";
-import { KeyboardHelpers } from "../../utils/helpers";
 
 interface CardProps {
   gif: Gif;
@@ -23,8 +22,7 @@ export const Card: FC<CardProps> = ({ gif, onClick, className }) => {
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    const keyPressInfo = KeyboardHelpers.getKeyPressInfo(event);
-    if (keyPressInfo.isEnter || keyPressInfo.isSpace) {
+    if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       handleClick();
     }
