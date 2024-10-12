@@ -1,10 +1,14 @@
-import { FC, useEffect, useRef, KeyboardEvent, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { MODAL_TITLE_LENGTH } from "../../utils/constants";
 import { Gif } from "../../utils/types";
 import { CloseIcon } from "../../assets/icons";
 import { SkeletonLoader } from "..";
 
 import * as Styled from "./modal.styles";
+import {
+  getKeyPressInfo,
+  KeyboardEvent,
+} from "../../utils/helpers/keyboardHelpers";
 
 interface ModalProps {
   gif: Gif;
@@ -26,15 +30,17 @@ export const Modal: FC<ModalProps> = ({ gif, onClose }) => {
       }
     };
 
-    const handleEscapeKey = (event: KeyboardEvent<HTMLDivElement>) => {
-      if (event.key === "Escape") {
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      const keyPressInfo = getKeyPressInfo(event);
+      if (keyPressInfo.isEscape) {
+        event.preventDefault();
         onClose();
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     document.addEventListener("keydown", (event) =>
-      handleEscapeKey(event as unknown as KeyboardEvent<HTMLDivElement>)
+      handleEscapeKey(event as unknown as KeyboardEvent)
     );
 
     // Focus the close button when the modal opens
@@ -46,7 +52,7 @@ export const Modal: FC<ModalProps> = ({ gif, onClose }) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", (event) =>
-        handleEscapeKey(event as unknown as KeyboardEvent<HTMLDivElement>)
+        handleEscapeKey(event as unknown as KeyboardEvent)
       );
 
       // Restore focus to the previously focused element when the modal closes
@@ -54,26 +60,13 @@ export const Modal: FC<ModalProps> = ({ gif, onClose }) => {
     };
   }, [onClose]);
 
-  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === "Tab") {
-      const focusableElements = modalRef.current?.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      );
-
-      if (focusableElements) {
-        const firstElement = focusableElements[0] as HTMLElement;
-        const lastElement = focusableElements[
-          focusableElements.length - 1
-        ] as HTMLElement;
-
-        if (event.shiftKey && document.activeElement === firstElement) {
-          event.preventDefault();
-          lastElement.focus();
-        } else if (!event.shiftKey && document.activeElement === lastElement) {
-          event.preventDefault();
-          firstElement.focus();
-        }
-      }
+  const handleKeyDown = (event: KeyboardEvent) => {
+    const keyPressInfo = getKeyPressInfo(event);
+    // Prevent default tab behavior and focus the close button
+    // Shift + Tab is not needed because isTab will also be true in this case
+    if (keyPressInfo.isTab) {
+      event.preventDefault();
+      closeButtonRef.current?.focus();
     }
   };
 
