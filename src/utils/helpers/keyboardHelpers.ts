@@ -62,7 +62,12 @@ const isArrowKey = (event: KeyboardEvent) => {
   return isLeftArrow || isRightArrow || isUpArrow || isDownArrow;
 };
 
-type ArrowKey = "arrowleft" | "arrowright" | "arrowup" | "arrowdown";
+enum ArrowKey {
+  LEFT = "arrowleft",
+  RIGHT = "arrowright",
+  UP = "arrowup",
+  DOWN = "arrowdown",
+}
 
 /**
  * Represents information about a key press event.
@@ -107,5 +112,31 @@ const useKeyDownEventListener = (
   useEventListener({ element, eventType: "keydown", callback });
 };
 
-export type { KeyPressInfo };
-export { useKeyDownEventListener, getKeyPressInfo };
+/**
+ * Represents information about navigation based on keyboard input.
+ */
+type NavigationInfo = {
+  /** Indicates if the navigation is to the next item */
+  isNext: boolean;
+  /** Indicates if the navigation is to the previous item */
+  isPrevious: boolean;
+};
+
+/**
+ * Determines the navigation direction based on the keyboard event input.
+ * Down or Right arrow keys navigate to the next, while Up or Left arrow keys navigate to the previous.
+ * @param {KeyboardEvent} event - The keyboard event object.
+ * @returns {NavigationInfo} An object containing information about the navigation direction.
+ */
+const getNavigationInfo = (event: KeyboardEvent): NavigationInfo => {
+  const { isArrow, arrowKey } = getKeyPressInfo(event);
+  const isNext =
+    isArrow && (arrowKey === ArrowKey.RIGHT || arrowKey === ArrowKey.DOWN);
+  return {
+    isNext,
+    isPrevious: isArrow && !isNext,
+  };
+};
+
+export type { KeyPressInfo, NavigationInfo };
+export { useKeyDownEventListener, getKeyPressInfo, getNavigationInfo };
