@@ -36,31 +36,31 @@ type ArrowKey =
   | KeyDictionary.DOWN;
 
 /**
- * Checks if the pressed key is the Enter key.
- * @param {KeyboardEvent} event - The keyboard event object.
- * @returns {boolean} True if the Enter key was pressed, false otherwise.
+ * Type representing a key check function.
  */
-const isEnterKey = (event: KeyboardEvent) => {
-  return event.key.toLowerCase() === KeyDictionary.ENTER;
+type KeyCheckFunction = (event: KeyboardEvent) => boolean;
+
+/**
+ * Object storing key check functions for each key in the KeyDictionary.
+ */
+const keyChecks: Record<keyof typeof KeyDictionary, KeyCheckFunction> = {
+  LEFT: (event) => event.key.toLowerCase() === KeyDictionary.LEFT,
+  RIGHT: (event) => event.key.toLowerCase() === KeyDictionary.RIGHT,
+  UP: (event) => event.key.toLowerCase() === KeyDictionary.UP,
+  DOWN: (event) => event.key.toLowerCase() === KeyDictionary.DOWN,
+  ENTER: (event) => event.key.toLowerCase() === KeyDictionary.ENTER,
+  SPACE: (event) => event.key.toLowerCase() === KeyDictionary.SPACE,
+  ESCAPE: (event) => event.key.toLowerCase() === KeyDictionary.ESCAPE,
+  TAB: (event) => event.key.toLowerCase() === KeyDictionary.TAB,
 };
 
 /**
- * Checks if the pressed key is the Escape key.
- * @param {KeyboardEvent} event - The keyboard event object.
- * @returns {boolean} True if the Escape key was pressed, false otherwise.
+ * Individual key check functions using the keyChecks object.
  */
-const isEscapeKey = (event: KeyboardEvent) => {
-  return event.key.toLowerCase() === KeyDictionary.ESCAPE;
-};
-
-/**
- * Checks if the pressed key is the Tab key.
- * @param {KeyboardEvent} event - The keyboard event object.
- * @returns {boolean} True if the Tab key was pressed, false otherwise.
- */
-const isTabKey = (event: KeyboardEvent) => {
-  return event.key.toLowerCase() === KeyDictionary.TAB;
-};
+const isEnterKey: KeyCheckFunction = keyChecks.ENTER;
+const isEscapeKey: KeyCheckFunction = keyChecks.ESCAPE;
+const isTabKey: KeyCheckFunction = keyChecks.TAB;
+const isSpaceKey: KeyCheckFunction = keyChecks.SPACE;
 
 /**
  * Checks if the pressed key combination is Shift + Tab.
@@ -72,25 +72,15 @@ const isShiftTabKey = (event: KeyboardEvent) => {
 };
 
 /**
- * Checks if the pressed key is the Space key.
- * @param {KeyboardEvent} event - The keyboard event object.
- * @returns {boolean} True if the Space key was pressed, false otherwise.
- */
-const isSpaceKey = (event: KeyboardEvent) => {
-  return event.key.toLowerCase() === KeyDictionary.SPACE;
-};
-
 /**
- * Checks if the pressed key is an arrow key (Left, Right, Up, or Down).
+ * Checks if the pressed key is an arrow key (Left, Right, Up or Down).
  * @param {KeyboardEvent} event - The keyboard event object.
  * @returns {boolean} True if an arrow key was pressed, false otherwise.
  */
 const isArrowKey = (event: KeyboardEvent) => {
-  const isLeftArrow = event.key.toLowerCase() === KeyDictionary.LEFT;
-  const isRightArrow = event.key.toLowerCase() === KeyDictionary.RIGHT;
-  const isUpArrow = event.key.toLowerCase() === KeyDictionary.UP;
-  const isDownArrow = event.key.toLowerCase() === KeyDictionary.DOWN;
-  return isLeftArrow || isRightArrow || isUpArrow || isDownArrow;
+  return ["LEFT", "RIGHT", "UP", "DOWN"].some((key) =>
+    keyChecks[key as keyof typeof KeyDictionary](event)
+  );
 };
 
 /**
@@ -157,10 +147,7 @@ const getNavigationInfo = (event: KeyboardEvent): NavigationInfo => {
   const isNext =
     isArrow &&
     (arrowKey === KeyDictionary.RIGHT || arrowKey === KeyDictionary.DOWN);
-  return {
-    isNext,
-    isPrevious: isArrow && !isNext,
-  };
+  return { isNext, isPrevious: isArrow && !isNext };
 };
 
 /**
