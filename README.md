@@ -175,7 +175,9 @@ The entire process ensures that the latest version of the application is always 
 
 ## 🧪 Testing
 
-To be added soon.
+In Progress ⏳
+
+Visit [Test Coverage PR](https://github.com/AnsurM/react-card-grid-challenge/pull/21) to check current progress.
 
 ## ♿ Accessibility
 
@@ -197,6 +199,7 @@ As we continue to improve and expand this application, here are some key areas w
 ### 🧪 Testing
 
 - Implement extensive unit, end-to-end, and integration tests as the app grows, ensuring robust functionality and easier maintenance.
+- Visit [Test Coverage PR](https://github.com/AnsurM/react-card-grid-challenge/pull/21) to check current progress.
 
 ### 🔬 Enhancements
 
