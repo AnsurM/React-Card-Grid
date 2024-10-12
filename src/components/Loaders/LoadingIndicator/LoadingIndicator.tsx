@@ -12,7 +12,7 @@ import * as Styled from "./loadingIndicator.styles";
 type GetLoadingSkeletonsListType = (limit: number) => JSX.Element[];
 export const getLoadingSkeletonsList: GetLoadingSkeletonsListType = (limit) => {
   return new Array(limit).fill(0).map((_, index) => (
-    <Styled.SkeletonLoaderContainer data-testid="skeleton-loader" key={index}>
+    <Styled.SkeletonLoaderContainer key={index}>
       <SkeletonLoader />
     </Styled.SkeletonLoaderContainer>
   ));
