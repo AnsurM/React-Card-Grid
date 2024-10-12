@@ -1,14 +1,20 @@
-import { FC, useEffect, useRef, useState } from "react";
-import { MODAL_TITLE_LENGTH } from "../../utils/constants";
-import { Gif } from "../../utils/types";
-import { CloseIcon } from "../../assets/icons";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
+
+// components
 import { SkeletonLoader } from "..";
 
+// assets
+import { CloseIcon } from "../../assets/icons";
+
+// utils
+import { MODAL_TITLE_LENGTH } from "../../utils/constants";
+import { Gif } from "../../utils/types";
+import { KeyboardHelpers, MouseHelpers } from "../../utils/helpers";
+import { CallbackEvent } from "../../utils/helpers/eventListeners";
+import { KeyboardEvent } from "../../utils/helpers/keyboardHelpers";
+
+// styles
 import * as Styled from "./modal.styles";
-import {
-  getKeyPressInfo,
-  KeyboardEvent,
-} from "../../utils/helpers/keyboardHelpers";
 
 interface ModalProps {
   gif: Gif;
@@ -20,48 +26,33 @@ export const Modal: FC<ModalProps> = ({ gif, onClose }) => {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+  const handleClickOutside = useCallback(
+    (event: CallbackEvent) => {
       if (
         event.target instanceof Element &&
         event.target.classList.contains("modal-overlay")
       ) {
         onClose();
       }
-    };
+    },
+    [onClose]
+  );
 
-    const handleEscapeKey = (event: KeyboardEvent) => {
-      const keyPressInfo = getKeyPressInfo(event);
-      if (keyPressInfo.isEscape) {
-        event.preventDefault();
-        onClose();
-      }
-    };
+  const handleEscapeKey = (event: KeyboardEvent) => {
+    const keyPressInfo = KeyboardHelpers.getKeyPressInfo(event);
+    if (keyPressInfo.isEscape) {
+      event.preventDefault();
+      onClose();
+    }
+  };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", (event) =>
-      handleEscapeKey(event as unknown as KeyboardEvent)
-    );
-
-    // Focus the close button when the modal opens
-    closeButtonRef.current?.focus();
-
-    // Save the previously focused element
-    const previouslyFocusedElement = document.activeElement as HTMLElement;
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", (event) =>
-        handleEscapeKey(event as unknown as KeyboardEvent)
-      );
-
-      // Restore focus to the previously focused element when the modal closes
-      previouslyFocusedElement?.focus();
-    };
-  }, [onClose]);
+  MouseHelpers.useMouseDownEventListener(document, handleClickOutside);
+  KeyboardHelpers.useKeyDownEventListener(document, (event) =>
+    handleEscapeKey(event as unknown as KeyboardEvent)
+  );
 
   const handleKeyDown = (event: KeyboardEvent) => {
-    const keyPressInfo = getKeyPressInfo(event);
+    const keyPressInfo = KeyboardHelpers.getKeyPressInfo(event);
     // Prevent default tab behavior and focus the close button
     // Shift + Tab is not needed because isTab will also be true in this case
     if (keyPressInfo.isTab) {
@@ -69,6 +60,17 @@ export const Modal: FC<ModalProps> = ({ gif, onClose }) => {
       closeButtonRef.current?.focus();
     }
   };
+
+  useEffect(() => {
+    // Focus the close button when the modal opens
+    closeButtonRef.current?.focus();
+    // Save the previously focused element
+    const previouslyFocusedElement = document.activeElement as HTMLElement;
+    return () => {
+      // Restore focus to the previously focused element when the modal closes
+      previouslyFocusedElement?.focus();
+    };
+  }, [onClose]);
 
   return (
     <Styled.ModalContainer
