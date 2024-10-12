@@ -1,7 +1,7 @@
 import { KeyboardEvent as ReactKeyboardEvent } from "react";
 
 type EventElement = HTMLDivElement | HTMLButtonElement;
-type KeyboardEvent = ReactKeyboardEvent<EventElement>;
+export type KeyboardEvent = ReactKeyboardEvent<EventElement>;
 
 /**
  * Checks if the pressed key is the Enter key.
@@ -93,35 +93,4 @@ const getKeyPressInfo = (event: KeyboardEvent): KeyPressInfo => {
   };
 };
 
-/**
- * Represents information about a key press event along with the original event.
- */
-type KeyPressCallbackInfo = {
-  event: KeyboardEvent;
-  keyPressInfo: KeyPressInfo;
-};
-
-/**
- * Properties for the key press handler function.
- */
-type KeyPressHandlerProps = {
-  event: KeyboardEvent;
-  callback: (keyPressInfo: KeyPressCallbackInfo) => void;
-};
-
-/**
- * Handles a key press event and returns detailed information about the key press.
- * @param {KeyPressHandlerProps} props - The properties for the key press handler.
- * @param {KeyboardEvent} props.event - The keyboard event object.
- * @returns {KeyPressCallbackInfo} An object containing the original event and detailed key press information.
- */
-const keyPressHandler = ({
-  event,
-}: KeyPressHandlerProps): KeyPressCallbackInfo => {
-  return {
-    event,
-    keyPressInfo: getKeyPressInfo(event),
-  };
-};
-
-export { keyPressHandler };
+export { getKeyPressInfo };
