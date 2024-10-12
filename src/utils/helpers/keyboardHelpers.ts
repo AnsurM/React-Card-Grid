@@ -1,4 +1,5 @@
 import { KeyboardEvent as ReactKeyboardEvent } from "react";
+import { useEventListener, CallbackEvent } from "./eventListeners";
 
 type EventElement = HTMLDivElement | HTMLButtonElement;
 export type KeyboardEvent = ReactKeyboardEvent<EventElement>;
@@ -93,4 +94,18 @@ const getKeyPressInfo = (event: KeyboardEvent): KeyPressInfo => {
   };
 };
 
-export { getKeyPressInfo };
+/**
+ * A custom hook to add a keydown event listener to an element.
+ * @param {EventTarget} element - The element to add the event listener to.
+ * @param {function} callback - The callback function to call when a keydown event occurs.
+ * @param {CallbackEvent} callback.event - The event object passed to the callback function.
+ */
+const useKeyDownEventListener = (
+  element: EventTarget,
+  callback: (event: CallbackEvent) => void
+) => {
+  useEventListener({ element, eventType: "keydown", callback });
+};
+
+export type { KeyPressInfo };
+export { useKeyDownEventListener, getKeyPressInfo };
