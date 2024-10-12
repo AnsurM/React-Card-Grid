@@ -1,6 +1,7 @@
 import { FC, KeyboardEvent } from "react";
 
 import * as Styled from "./pagination.styles";
+import { isKeyboardClick } from "../../utils/helpers/keyboardHelpers";
 interface PaginationProps {
   disablePrevious: boolean;
   disableNext: boolean;
@@ -18,7 +19,7 @@ export const Pagination: FC<PaginationProps> = ({
     event: KeyboardEvent<HTMLButtonElement>,
     onClick: () => void
   ) => {
-    if (event.key === "Enter" || event.key === " ") {
+    if (isKeyboardClick(event)) {
       event.preventDefault();
       onClick();
     }
