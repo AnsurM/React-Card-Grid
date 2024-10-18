@@ -1,8 +1,25 @@
-import { FC, useRef, useEffect, KeyboardEvent } from "react";
+import { FC, useRef, KeyboardEvent } from "react";
 import { Gif } from "../../utils/types";
 import { Card, ErrorIndicator, LoadingIndicator, NoResults } from "..";
 
 import * as Styled from "./gifGrid.styles";
+import { KeyboardHelpers } from "../../utils/helpers";
+
+const getCardSiblings = (currentElement: HTMLDivElement) => {
+  const currentCell = currentElement.closest('[role="gridcell"]');
+  if (!currentCell) return;
+  const currentRow = currentCell.parentElement;
+  if (!currentRow) return;
+
+  const previousSibling = currentRow.previousElementSibling?.querySelector(
+    ".card"
+  ) as HTMLElement;
+  const nextSibling = currentRow.nextElementSibling?.querySelector(
+    ".card"
+  ) as HTMLElement;
+
+  return { previousSibling, nextSibling };
+};
 
 interface GifGridProps {
   innerRef?: React.RefObject<HTMLDivElement>;
@@ -21,43 +38,23 @@ export const GifGrid: FC<GifGridProps> = ({
   onGifClick,
 }) => {
   const gridRef = useRef<HTMLDivElement>(null);
-  const hasNoResults = gifs.length === 0 && !loading && !error;
-
-  useEffect(() => {
-    if (!loading && !error && gifs.length > 0) {
-      gridRef.current?.focus();
-    }
-  }, [loading, error, gifs]);
+  const isApiResolved = !loading && !error;
+  const hasGifs = gifs.length > 0;
+  const hasNoResults = !hasGifs && isApiResolved;
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    const currentElement = document.activeElement;
-    if (!currentElement || !currentElement.parentElement) return;
+    const { isNext, isPrevious } = KeyboardHelpers.getNavigationInfo(event);
+    if (!isNext && !isPrevious) return;
 
-    const currentCell = currentElement.closest('[role="gridcell"]');
-    if (!currentCell) return;
+    event.preventDefault();
 
-    const currentRow = currentCell.parentElement;
-    if (!currentRow) return;
+    const { previousSibling, nextSibling } =
+      getCardSiblings(event.target as HTMLDivElement) || {};
 
-    switch (event.key) {
-      case "ArrowUp":
-      case "ArrowRight":
-        event.preventDefault();
-        (
-          currentRow.nextElementSibling?.querySelector(".card") as HTMLElement
-        )?.focus();
-        break;
-      case "ArrowDown":
-      case "ArrowLeft":
-        event.preventDefault();
-        (
-          currentRow.previousElementSibling?.querySelector(
-            ".card"
-          ) as HTMLElement
-        )?.focus();
-        break;
-      default:
-        break;
+    if (isNext) {
+      nextSibling?.focus();
+    } else {
+      previousSibling?.focus();
     }
   };
 
